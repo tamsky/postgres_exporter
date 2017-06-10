@@ -150,11 +150,11 @@ smoketest_postgres() {
 }
 
 # Start pulling the docker images in advance
-for version in ${VERSIONS[@]}; do
+for version in "${VERSIONS[@]}"; do
     docker pull postgres:${version} > /dev/null &
 done
 
-for version in ${VERSIONS[@]}; do
+for version in "${VERSIONS[@]}"; do
     echo "Testing postgres version ${version}"
     smoketest_postgres ${version}
 done
