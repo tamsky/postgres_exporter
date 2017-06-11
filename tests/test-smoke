@@ -19,8 +19,10 @@ METRICS_DIR=$(pwd)
 # Read the absolute path to the exporter
 postgres_exporter=$(readlink -f "$1")
 
-test_binary=$(readlink -f "$2")
-# Make sure we have an executable:
+# $2 is actually multiple args, don't quote it here to allow argument expansion:
+# shellcheck disable=SC2086
+test_binary=$(readlink -f $2)
+# Make sure at least the first arg is executable:
 [[ -x "${test_binary}" ]] || exit 1
 
 export POSTGRES_PASSWORD=postgres
