@@ -45,7 +45,7 @@ style: tools
 shellcheck:
 	shellcheck $(SHELL_SRC)
 
-lint: tools shellcheck
+lint: tools
 	@echo Using $(CONCURRENT_LINTERS) processes
 	gometalinter -j $(CONCURRENT_LINTERS) --deadline=$(LINTER_DEADLINE) --disable=gotype --disable=gocyclo $(GO_DIRS)
 
