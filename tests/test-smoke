@@ -22,8 +22,9 @@ postgres_exporter=$(readlink -f "$1")
 # $2 is actually multiple args, don't quote it here to allow argument expansion:
 # shellcheck disable=SC2086
 test_binary=$(readlink -f $2)
+# Maybe we can't do this:
 # Make sure at least the first arg is executable:
-[[ -x "${test_binary}" ]] || exit 1
+# [[ -x "${test_binary}" ]] || exit 1
 
 export POSTGRES_PASSWORD=postgres
 exporter_port=9187
