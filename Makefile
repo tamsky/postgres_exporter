@@ -18,8 +18,7 @@ SHELL := env PATH=$(PATH) /bin/bash
 # allowing us to use 'find *.sh', like we do for GO_SRC.
 hash := \#
 SHELL_SRC := $(shell grep -l '$(hash)!/bin/bash' -r . \
-			  --exclude './tools/*' \
-                          --exclude '*/vendor/*' \
+                          --exclude-dir 'tools' \
                           --exclude Makefile)
 
 all: style lint shellcheck test postgres_exporter
