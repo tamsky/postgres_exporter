@@ -88,7 +88,7 @@ if [[ "$1" = 'postgres' ]]; then
 			export POSTGRES_USER=${POSTGRES_USER:=postgres}
 			export POSTGRES_DB=${POSTGRES_DB:=$POSTGRES_USER}
 
-			declare -a psql=( "ON_ERROR_STOP=1" psql -v )
+			declare -a psql=( ON_ERROR_STOP=1 psql -v )
 
 		        if [[ "$POSTGRES_DB" != 'postgres' ]]; then
 			    "${psql[@]}" --username postgres <<-EOSQL
@@ -97,6 +97,8 @@ if [[ "$1" = 'postgres' ]]; then
 			    echo
 			fi
 
+                        # Possible alternate flavor vs <<-HEREDOC :
+                        #
 			# if [[ "$POSTGRES_DB" != "postgres" ]]; then
                         #     SQL=$(printf 'CREATE DATABASE "%s" ;' $POSTGRES_DB)
 			#     "${psql[@]}" --username postgres <( echo "${SQL}" )
