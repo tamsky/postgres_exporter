@@ -85,10 +85,11 @@ if [[ "$1" = 'postgres' ]]; then
 			     -o "-c listen_addresses='localhost'" \
 			     -w start
 
-			export POSTGRES_USER=${POSTGRES_USER:=postgres}
-			export POSTGRES_DB=${POSTGRES_DB:=$POSTGRES_USER}
+		        : ${POSTGRES_USER:=postgres}
+		        : ${POSTGRES_DB:=$POSTGRES_USER}
+		        export POSTGRES_USER POSTGRES_DB
 
-			declare -a psql=( ON_ERROR_STOP=1 psql -v )
+		        psql=( psql -v ON_ERROR_STOP=1 )
 
 		        if [[ "$POSTGRES_DB" != 'postgres' ]]; then
 			    "${psql[@]}" --username postgres <<-EOSQL
