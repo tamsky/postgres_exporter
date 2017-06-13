@@ -16,7 +16,7 @@ done
 
 DIR=$( cd -P "$( dirname "${SOURCE}" )" && pwd )
 cd "${DIR}" || {
-    echo unable to cd to ${DIR} ;
+    echo "unable to cd to ${DIR}" ;
     exit 1 ;
 }
 
