@@ -27,6 +27,8 @@ postgres_exporter=$(readlink -f "$1")
 # shellcheck disable=SC2086
 test_binary=$(readlink -f $2)
 
+echo "${BASH_VERSION}"
+
 # Confirm that the first word is a binary:
 [[ -x "${test_binary%% *}" ]] || {
     echo "${test_binary%% *} is not an executable file" ;
