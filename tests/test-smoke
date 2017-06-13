@@ -2,6 +2,7 @@
 # Basic integration tests with postgres. Requires docker to work.
 
 SOURCE="${BASH_SOURCE[0]}"
+METRICS_DIR=$(pwd)
 
 # resolve $SOURCE until the file is no longer a symlink
 while [[ -h "${SOURCE}" ]]; do 
@@ -12,9 +13,12 @@ while [[ -h "${SOURCE}" ]]; do
   # to the path where the symlink file was located
   [[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}"
 done
-DIR=$( cd -P "$( dirname "${SOURCE}" )" && pwd )
 
-METRICS_DIR=$(pwd)
+DIR=$( cd -P "$( dirname "${SOURCE}" )" && pwd )
+cd "${DIR}" || {
+    echo unable to cd to ${DIR} ;
+    exit 1 ;
+}
 
 # Read the absolute path to the exporter
 postgres_exporter=$(readlink -f "$1")
@@ -22,14 +26,15 @@ postgres_exporter=$(readlink -f "$1")
 # $2 is actually multiple args, don't quote it here to allow argument expansion:
 # shellcheck disable=SC2086
 test_binary=$(readlink -f $2)
-# Maybe we can't do this:
-# Make sure at least the first arg is executable:
-# [[ -x "${test_binary}" ]] || exit 1
+
+# Confirm that the first word is a binary:
+[[ -x "${test_binary%% *}" ]] || {
+    echo "${test_binary%% *} is not an executable file" ;
+    exit 1 ;
+}
 
 export POSTGRES_PASSWORD=postgres
 exporter_port=9187
-
-cd "${DIR}" || exit 1
 
 declare -a VERSIONS=(
     9.1
@@ -39,6 +44,8 @@ declare -a VERSIONS=(
     9.5
     9.6
 )
+
+# START OF FUNCTIONS
 
 wait_for_postgres(){
     local ip=$1
@@ -173,6 +180,8 @@ smoketest_postgres() {
 
     cd "${old_pwd}" || exit 1
 }
+
+### START OF MAIN PROGRAM
 
 # Start pulling the docker images in advance
 for version in "${VERSIONS[@]}"; do
