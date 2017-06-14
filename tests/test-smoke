@@ -23,14 +23,19 @@ cd "${DIR}" || {
 # Read the absolute path to the exporter
 postgres_exporter=$(readlink -f "$1")
 
-# $2 is actually multiple args, don't quote it here to allow argument expansion
-# echo wrapper removes newlines(^J) in readlink output.
+# $2 is actually multiple args, avoid quoting to allow argument expansion.
+# readlink returns one line of ouptut per input arg.
 # shellcheck disable=SC2086
-test_binary=$(echo $(readlink -f $2))
+test_binary=$(readlink -f $2)
 
 echo "${BASH_VERSION}"
 printf "%s" "${test_binary}" | hexdump -C
 printf "%s" "${test_binary}" | hexdump -c
+
+# remove newlines(^J) from readlink output:
+# shellcheck disable=SC2005
+test_binary=${test_binary}
+
 printf -- -------------
 printf "%s" "${test_binary%% *}" | hexdump -C
 printf "%s" "${test_binary%% *}" | hexdump -c

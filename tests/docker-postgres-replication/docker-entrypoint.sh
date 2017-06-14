@@ -90,6 +90,7 @@ if [ "$1" = 'postgres' ]; then
 		: ${POSTGRES_DB:=$POSTGRES_USER}
 		export POSTGRES_USER POSTGRES_DB
 
+                # shellcheck disable=SC2191
 		psql=( psql -v ON_ERROR_STOP=1 )
 
 		if [ "$POSTGRES_DB" != 'postgres' ]; then
