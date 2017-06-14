@@ -28,6 +28,10 @@ postgres_exporter=$(readlink -f "$1")
 test_binary=$(readlink -f $2)
 
 echo "${BASH_VERSION}"
+printf "${test_binary}" | hexdump -C
+printf -- -------------
+printf "${test_binary%% *}" | hexdump -C
+
 
 # Confirm that the first word is a binary:
 [[ -x "${test_binary%% *}" ]] || {
