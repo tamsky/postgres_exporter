@@ -23,14 +23,17 @@ cd "${DIR}" || {
 # Read the absolute path to the exporter
 postgres_exporter=$(readlink -f "$1")
 
-# $2 is actually multiple args, don't quote it here to allow argument expansion:
+# $2 is actually multiple args, don't quote it here to allow argument expansion
+# echo wrapper because readlink output contains newlines(^J).
 # shellcheck disable=SC2086
-test_binary=$(readlink -f $2)
+test_binary=$(echo $(readlink -f $2))
 
 echo "${BASH_VERSION}"
-printf "${test_binary}" | hexdump -C
+printf "%s" "${test_binary}" | hexdump -C
+printf "%s" "${test_binary}" | hexdump -c
 printf -- -------------
-printf "${test_binary%% *}" | hexdump -C
+printf "%s" "${test_binary%% *}" | hexdump -C
+printf "%s" "${test_binary%% *}" | hexdump -c
 
 
 # Confirm that the first word is a binary:
