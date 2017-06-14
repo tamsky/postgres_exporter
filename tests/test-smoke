@@ -24,7 +24,7 @@ cd "${DIR}" || {
 postgres_exporter=$(readlink -f "$1")
 
 # $2 is actually multiple args, don't quote it here to allow argument expansion
-# echo wrapper because readlink output contains newlines(^J).
+# echo wrapper removes newlines(^J) in readlink output.
 # shellcheck disable=SC2086
 test_binary=$(echo $(readlink -f $2))
 
