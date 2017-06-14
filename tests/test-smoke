@@ -23,23 +23,17 @@ cd "${DIR}" || {
 # Read the absolute path to the exporter
 postgres_exporter=$(readlink -f "$1")
 
-# $2 is actually multiple args, avoid quoting to allow argument expansion.
-# readlink returns one line of ouptut per input arg.
-# use echo to remove newlines(^J):
-
-echo "${BASH_VERSION}"
-printf "%s" "${test_binary}" | hexdump -C
-printf "%s" "${test_binary}" | hexdump -c
-
+# $2 is actually multiple space-separated values,
+# we avoid quoting it here to allow argument expansion.
+#
+# readlink outputs one line per argument
+#
+# echo removes the newlines
+#
 # shellcheck disable=SC2086,SC2046,SC2005
 test_binary=$(echo $(readlink -f $2))
 
-printf -- -------------
-printf "%s" "${test_binary%% *}" | hexdump -C
-printf "%s" "${test_binary%% *}" | hexdump -c
-
-
-# Confirm that the first word is a binary:
+# Confirm that the first arg is a binary we can run:
 [[ -x "${test_binary%% *}" ]] || {
     echo "${test_binary%% *} is not an executable file" ;
     exit 1 ;
